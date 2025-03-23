@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('group_users', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string(column:'status', length:25);
+            $table->string(column:'role', length:25);
+            $table->string(column:'token', length:1024)->nullable();
+            $table->timestamp(column:'token_expire_date')->nullable();
+            $table->timestamp(column:'token_used')->nullable();
+            $table->foreignId(column:'user_id')->constrained(table:'users');
+            $table->foreignId(column:'group_id')->constrained(table:'groups');
+            $table->foreignId(column:'created_by')->constrained(table:'users');
+            $table->timestamp(column:'created_at')->nullable();
         });
     }
 
