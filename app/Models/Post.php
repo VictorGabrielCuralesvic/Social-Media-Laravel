@@ -9,5 +9,5 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Post extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    use SoftDeletes; /* não deleta as informações de forma permanemte, apenas marca elas como deletadas por um timestamp (deleted_at) */
 }
