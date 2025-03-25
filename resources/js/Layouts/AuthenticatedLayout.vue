@@ -5,9 +5,12 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+
+const authUser = usePage().props.auth.user;
+
 </script>
 
 <template>
@@ -29,29 +32,31 @@ const showingNavigationDropdown = ref(false);
                             </div> -->
 
                             <!-- Navigation Links -->
-<!--                              <div
+                              <div
                                 class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
                             >
                                 <NavLink
                                     :href="route('dashboard')"
                                     :active="route().current('dashboard')"
                                 >
-                                    Dashboard
+                                <ApplicationLogo
+                                        class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"
+                                    />
                                 </NavLink>
-                            </div> -->
+                            </div>
                         </div>
 
                         <div class="hidden sm:ms-6 sm:flex sm:items-center">
                             <!-- Settings Dropdown -->
                             <div class="relative ms-3">
-                                <Dropdown align="right" width="48">
+                                <Dropdown v-if="authUser" align="right" width="48">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
                                                 class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
                                             >
-                                                {{ $page.props.auth.user.name }}
+                                                {{ authUser.name }}
 
                                                 <svg
                                                     class="-me-0.5 ms-2 h-4 w-4"
@@ -71,7 +76,7 @@ const showingNavigationDropdown = ref(false);
 
                                     <template #content>
                                         <DropdownLink
-                                            :href="route('profile.edit')"
+                                            :href="route('profile', {username: authUser.username })"
                                         >
                                             Profile
                                         </DropdownLink>
@@ -84,6 +89,11 @@ const showingNavigationDropdown = ref(false);
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
+                                <div v-else>
+                                    <Link class="text-white" :href="route('login')">
+                                        Login
+                                    </Link>
+                                </div>
                             </div>
                         </div>
 
@@ -148,17 +158,16 @@ const showingNavigationDropdown = ref(false);
                     </div> -->
 
                     <!-- Responsive Settings Options -->
-                    <div
-                        class="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600"
-                    >
-                        <div class="px-4">
+                    <div class="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
+                        <template v-if="authUser">
+                            <div class="px-4">
                             <div
                                 class="text-base font-medium text-gray-800 dark:text-gray-200"
                             >
-                                {{ $page.props.auth.user.name }}
+                                {{ authUser.name }}
                             </div>
                             <div class="text-sm font-medium text-gray-500">
-                                {{ $page.props.auth.user.email }}
+                                {{ authUser.email }}
                             </div>
                         </div>
 
@@ -174,6 +183,10 @@ const showingNavigationDropdown = ref(false);
                                 Log Out
                             </ResponsiveNavLink>
                         </div>
+                        </template>
+                        <template>
+                            Login Button
+                        </template>
                     </div>
                 </div>
             </nav>
