@@ -1,4 +1,10 @@
 <script setup>
+import CreatePost from '@/Components/App/CreatePost.vue';
+import FollowingList from '@/Components/App/FollowingList.vue';
+import GroupItem from '@/Components/App/GroupItem.vue';
+import GroupList from '@/Components/App/GroupList.vue';
+import PostList from '@/Components/App/PostList.vue';
+import TextInput from '@/Components/TextInput.vue';
 import { Head, Link } from '@inertiajs/vue3';
 
 defineProps({
@@ -28,5 +34,17 @@ function handleImageError() {
 
 <template>
     <Head title="Social Media WebSite"></Head>
-    Test
+
+    <div class="grid lg:grid-cols-12 gap-3 p-4 h-full">
+        <div class="lg:col-span-3 lg:order-1 h-full overflow-hidden">
+            <GroupList />
+        </div>
+        <div class="lg:col-span-3 lg:order-3 h-ffull overflow-auto">
+            <FollowingList />
+        </div>
+        <div class="lg:col-span-6 lg:order-2 h-full overflow-hidden flex flex-col">
+            <CreatePost />
+            <PostList class="flex-1" />
+        </div>
+    </div>
 </template>
