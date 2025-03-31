@@ -66,8 +66,8 @@ class ProfileController extends Controller
     public function updateImage(Request $request)
     {
         $data = $request->validate([
-            'cover' => ['image'],
-            'avatar' => ['nullable', 'image']
+            'cover' => ['nullable','image'],
+            'avatar' => ['nullable','image']
         ]);
 
         $user = $request->user();
@@ -84,6 +84,15 @@ class ProfileController extends Controller
             $path = $cover->store('user-' . $user->id, 'public');
             $user->update(['cover_path' => $path]);
             $success = 'Your cover image was updated';
+        }
+
+        if ($avatar) {
+            if ($user->avatar_path) {
+                Storage::disk('public')->delete($user->avatar_path);
+            }
+            $path = $avatar->store('user-' . $user->id, 'public');
+            $user->update(['avatar_path' => $path]);
+            $success = 'Your avatar image was updated';
         }
 
         return back()->with('success', $success);
