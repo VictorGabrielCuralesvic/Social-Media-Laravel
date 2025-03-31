@@ -17,7 +17,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
     use HasSlug;
 
-    /**
+    /** 
      * The attributes that are mass assignable.
      *
      * @var list<string>
@@ -27,6 +27,8 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
+        'cover_path',
+        'avatar_path'
     ];
 
     /**
