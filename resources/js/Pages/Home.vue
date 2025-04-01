@@ -9,6 +9,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 
 defineProps({
+    posts: Object,
     canLogin: {
         type: Boolean,
     },
@@ -37,6 +38,7 @@ function handleImageError() {
     <Head title="Social Media WebSite"></Head>
 
     <AuthenticatedLayout>
+        <!-- <pre>{{ posts }}</pre> -->
         <div class="grid lg:grid-cols-12 gap-3 p-4 h-full">
             <div class="lg:col-span-3 lg:order-1 h-full overflow-hidden">
                 <GroupList />
@@ -46,7 +48,7 @@ function handleImageError() {
             </div>
             <div class="lg:col-span-6 lg:order-2 h-full overflow-hidden flex flex-col">
                 <CreatePost />
-                <PostList class="flex-1" />
+                <PostList :posts="posts.data" class="flex-1" />
             </div>
         </div>
     </AuthenticatedLayout>  
