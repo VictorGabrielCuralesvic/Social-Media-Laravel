@@ -13,7 +13,12 @@ class Post extends Model
     use HasFactory;
     use SoftDeletes; /* não deleta as informações de forma permanemte, apenas marca elas como deletadas por um timestamp (deleted_at) */
 
-    protected $fillable = ['user_id','body'];
+    protected $fillable = [
+        'user_id',
+        'body',
+        'created_at',
+        'updated_at'
+    ];
 
     public function user(): BelongsTo
     {
