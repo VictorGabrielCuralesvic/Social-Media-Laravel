@@ -12,6 +12,7 @@ import {
 import InputTextArea from '../InputTextArea.vue'
 import PostUserHeader from './PostUserHeader.vue'
 import { useForm } from '@inertiajs/vue3'
+import { Ckeditor, useCKEditorCloud } from '@ckeditor/ckeditor5-vue'
 
 const isOpen = ref(true)
 
@@ -29,6 +30,33 @@ const show = computed({
 })
 
 const emit = defineEmits(['update:modelValue'])
+
+const cloud = useCKEditorCloud({
+    version: '44.3.0',
+})
+
+const editor = computed(() => {
+    if (!cloud.data.value) return null
+    return cloud.data.value.CKEditor.ClassicEditor
+})
+
+const editorConfig = computed(() => {
+    if (!cloud.data.value) return null
+    
+    const { Essentials, Paragraph, Bold, Italic, Heading, List, Link } = cloud.data.value.CKEditor
+    
+    return {
+        licenseKey: 'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NzUyNjA3OTksImp0aSI6ImQ2M2MwNzUwLTE0OGEtNDAyNi1hMzZlLTRjMTFhYmM4ODk2NCIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiXSwiZmVhdHVyZXMiOlsiRFJVUCJdLCJ2YyI6IjMzMzM4OTY5In0.Ve9pQeQO4HPD4HKKcCBw9z_JIt1BMPg81D6EssuHsgQ0Ygps_OIGGnJRSpnGN-CErPjpJ3727pSPOUOKOSoavw', 
+        plugins: [Essentials, Paragraph, Bold, Italic, Heading, List, Link],
+        toolbar: [
+            'heading', '|',
+            'bold', 'italic', '|',
+            'numberedList', 'bulletedList', '|',
+            'link', '|',
+            'undo', 'redo',
+        ]
+    }
+})
 
 function closeModal() {
   show.value = false
@@ -101,7 +129,15 @@ function submit() {
 
                         <div class="p-3 mt-2">
                             <PostUserHeader :post="post" :show-time="false" class="mb-3"/>
-                            <InputTextArea v-model="form.body" class="w-full min-h-[150px] max-h-[60vh] text-base leading-relaxed" />
+
+                            <ckeditor
+                                    :editor="editor"
+                                    v-model="form.body"
+                                    :config="editorConfig"
+                                    class="w-full min-h-[150px] max-h-[60vh] text-base leading-relaxed"
+                            />
+
+                            <!-- <InputTextArea v-model="form.body" class="w-full min-h-[150px] max-h-[60vh] text-base leading-relaxed" /> -->
                             
                         </div>
 
