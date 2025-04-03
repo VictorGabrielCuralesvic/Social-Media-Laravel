@@ -165,8 +165,7 @@ function deletePost() {
             </button>
         </div>
     </div>
-
-    <PostModal :post="post" v-model="showEditModal" @updated="handlePostUpdated" />
+     <PostModal :post="post" v-model="showEditModal" @updated="handlePostUpdated" />
 </template>
 
 <style scoped>

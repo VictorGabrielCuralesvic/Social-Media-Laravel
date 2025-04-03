@@ -68,17 +68,29 @@ const form = useForm({
 })
 
 function submit() {
-    form.put(route('post.update', form.id), {
-        preserveScroll: true,
-        onSuccess: () => {
-            closeModal()
-            //emit('updated', { ...props.post, body: form.body })
-            window.location.reload();
-        },
-        onError: (errors) => {
-            console.error('Update failed:', errors)
-        }
-    })
+    if (form.id) {
+            form.put(route('post.update', form.id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                closeModal()
+                window.location.reload();
+            },
+            onError: (errors) => {
+                console.error('Update failed:', errors)
+            }
+        }) 
+    }
+    else {
+        form.post(route('post.create'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                show.value = false;
+                form.reset();
+            }
+        })
+    }
+    
+
 }
 
 </script>
@@ -120,7 +132,7 @@ function submit() {
                         as="h3"
                         class="flex items-center justify-between py-3 px-4 font-medium bg-gray-100 text-gray-900"
                         >
-                            Update Post
+                            {{ form.id ? 'Update Post' : 'Create Post' }}
                             <button @click="show = false" class="w-8 h-8 rounded-ful hover:bg-black/5 transition flex items-center justify-center">
                                 <XMarkIcon class="w-4 h-4" />
                             </button>
