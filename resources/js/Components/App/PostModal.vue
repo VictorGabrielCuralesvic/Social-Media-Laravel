@@ -69,18 +69,25 @@ const editorConfig = computed(() => {
 })
 
 function closeModal() {
-  show.value = false
-  form.reset()
-  attachmentFiles.value = []
+    show.value = false
+    resetModal()
+}
 
+function resetModal() {
+    form.reset()
+    attachmentFiles.value = []
 }
 
 const form = useForm({
     id: props.post.id,
-    body: props.post.body 
+    body: props.post.body ,
+    attachments: []
 })
 
 function submit() {
+
+    
+    form.attachments = attachmentFiles.value.map(myFile => myFile.file)
     if (form.id) {
             form.put(route('post.update', form.id), {
             preserveScroll: true,
@@ -97,9 +104,7 @@ function submit() {
         form.post(route('post.create'), {
             preserveScroll: true,
             onSuccess: () => {
-                show.value = false;
-                form.reset();
-                attachmentFiles.value();
+                closeModal()
             }
         })
     }
