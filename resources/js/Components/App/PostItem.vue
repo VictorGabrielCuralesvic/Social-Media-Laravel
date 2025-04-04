@@ -7,6 +7,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 import PostModal from './PostModal.vue'
 import { ref } from 'vue'
 import PostUserHeader from './PostUserHeader.vue'
+import { isImage } from '@/helpers'
 
 const showEditModal = ref(false)
 
@@ -18,11 +19,6 @@ const props = defineProps({
 
 const handlePostUpdated = (updatedBody) => {
     Object.assign(props.post, updatedPost)
-}
-
-function isImage(attachment) {
-    const mime = attachment.mime.split('/')
-    return mime[0].toLowerCase() == 'image'
 }
 
 function deletePost() {

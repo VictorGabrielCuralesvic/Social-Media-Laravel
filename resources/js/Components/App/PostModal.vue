@@ -1,6 +1,6 @@
 <script setup>
 
-import { XMarkIcon } from '@heroicons/vue/24/solid'
+import { XMarkIcon, PaperClipIcon, PaperAirplaneIcon } from '@heroicons/vue/24/solid'
 import { computed, ref } from 'vue'
 import {
   TransitionRoot,
@@ -13,6 +13,7 @@ import InputTextArea from '../InputTextArea.vue'
 import PostUserHeader from './PostUserHeader.vue'
 import { useForm } from '@inertiajs/vue3'
 import { Ckeditor, useCKEditorCloud } from '@ckeditor/ckeditor5-vue'
+import { isImage } from '@/helpers'
 
 const isOpen = ref(true)
 
@@ -23,6 +24,15 @@ const props = defineProps({
     },
     modelValue: Boolean
 })
+
+/**
+ * {
+ *     file: File,
+ *     url: '',
+ * }
+ * @type {Ref<UnwrapRef<*[]>>}
+ */
+const attachmentFiles =  ref([])
 
 const show = computed({
     get: () => props.modelValue,
@@ -60,6 +70,9 @@ const editorConfig = computed(() => {
 
 function closeModal() {
   show.value = false
+  form.reset()
+  attachmentFiles.value = []
+
 }
 
 const form = useForm({
@@ -86,11 +99,45 @@ function submit() {
             onSuccess: () => {
                 show.value = false;
                 form.reset();
+                attachmentFiles.value();
             }
         })
     }
     
 
+}
+
+async function onAttachmentChoose($event) {
+    console.log($event.target.files)
+    for (const file of $event.target.files) {
+        const myFile = {
+            file,
+            url: await readFile(file)
+        }
+        attachmentFiles.value.push(myFile)
+    }
+    $event.target.value =  null;
+    console.log(attachmentFiles.value)
+}
+
+async function readFile(file) {
+    return new Promise((res, rej) => {
+        if (isImage(file)) {
+        const reader =  new FileReader();
+        reader.onload = () => {
+            res(reader.result)
+        }
+        reader.onError = rej
+
+        reader.readAsDataURL(file)
+        } else {
+            res(null)
+        }
+    })
+}
+
+function removeFile(myFile) {
+    attachmentFiles.value = attachmentFiles.value.filter(f => f !== myFile)
 }
 
 </script>
@@ -149,17 +196,49 @@ function submit() {
                                     class="w-full min-h-[150px] max-h-[60vh] text-base leading-relaxed"
                             />
 
-                            <!-- <InputTextArea v-model="form.body" class="w-full min-h-[150px] max-h-[60vh] text-base leading-relaxed" /> -->
+                            <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 my-3"> 
+
+                                <template v-for="(myFile, ind) of attachmentFiles">
+
+                                    <div class="group aspect-asquare bg-blue-100 flex flex-col items-center justify-center text-gray-500 relative">
+
+                                        <button 
+                                            @click="removeFile(myFile)"
+                                            class="absolute z-20 right-1 top-1 w-7 h-7 flex items-center justify-center bg-black/80 text-white rounded-full hover:bg-black/20">
+                                            <XMarkIcon class="h-5 w-5" />
+                                        </button>
+
+                                        <img v-if="isImage(myFile.file)" :src="myFile.url" class="object-cover aspect-asquare" />
+
+                                        <template v-else>
+
+                                            <PaperClipIcon class="w-10 h-10 mb-3" />
+
+                                            <small class="text-center">{{ myFile.file.name }}</small>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
                             
                         </div>
 
                         <!-- Rodape fixo -->
-                        <div class="py-3 px-4">
+                        <div class="flex gap-2 py-3 px-4">
                             <button
                                 type="button"
-                                class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 w-full"
+                                class="flex items-center justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 w-full relative"
                                 @click="submit"
                             >
+                                <PaperClipIcon class="w-4 h-4 mr-2" />
+                                Attach Files
+                                <input @click.stop @change="onAttachmentChoose" type="file" multiple class="absolute left-0 top-0 right-0 bottom-0 opacity-0">
+                            </button>
+                            <button
+                                type="button"
+                                class="flex items-center justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 w-full"
+                                @click="submit"
+                            >
+                                <PaperAirplaneIcon class="w-4 h-4 mr-2" />
                                 Submit!
                             </button>
                         </div>
