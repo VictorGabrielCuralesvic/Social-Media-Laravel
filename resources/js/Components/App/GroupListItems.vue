@@ -17,15 +17,6 @@ const searchKeyword = ref('');
             <div v-else>
                 <GroupItem image="https://picsum.photos/200" title="Laravel Developers" description="Lorem Ipsum" />
                 <GroupItem image="https://picsum.photos/200" title="Vue.js Developers" description="Lorem Ipsum"/>
-                <GroupItem image="https://picsum.photos/200" title="Vue.js Developers" description="Lorem Ipsum"/>
-                <GroupItem image="https://picsum.photos/200" title="Vue.js Developers" description="Lorem Ipsum"/>
-                <GroupItem image="https://picsum.photos/200" title="Vue.js Developers" description="Lorem Ipsum"/>
-                <GroupItem image="https://picsum.photos/200" title="Vue.js Developers" description="Lorem Ipsum"/>
-                <GroupItem image="https://picsum.photos/200" title="Vue.js Developers" description="Lorem Ipsum"/>
-                <GroupItem image="https://picsum.photos/200" title="Vue.js Developers" description="Lorem Ipsum"/>
-                <GroupItem image="https://picsum.photos/200" title="Vue.js Developers" description="Lorem Ipsum"/>
-                <GroupItem image="https://picsum.photos/200" title="Vue.js Developers" description="Lorem Ipsum"/>
-                <GroupItem image="https://picsum.photos/200" title="Vue.js Developers" description="Lorem Ipsum"/>
             </div>
         </div>
 </template>

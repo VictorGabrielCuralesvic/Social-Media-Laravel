@@ -16,22 +16,6 @@ const searchKeyword = ref('')
             <div v-else>
                 <FollowingItem image="https://picsum.photos/200" title="John Doe" description="Lorem Ipsum"/>
                 <FollowingItem image="https://picsum.photos/200" title="John Green" description="Lorem Ipsum"/>
-                <FollowingItem image="https://picsum.photos/200" title="John Green" description="Lorem Ipsum"/>
-                <FollowingItem image="https://picsum.photos/200" title="John Green" description="Lorem Ipsum"/>
-                <FollowingItem image="https://picsum.photos/200" title="John Green" description="Lorem Ipsum"/>
-                <FollowingItem image="https://picsum.photos/200" title="John Green" description="Lorem Ipsum"/>
-                <FollowingItem image="https://picsum.photos/200" title="John Green" description="Lorem Ipsum"/>
-                <FollowingItem image="https://picsum.photos/200" title="John Green" description="Lorem Ipsum"/>
-                <FollowingItem image="https://picsum.photos/200" title="John Green" description="Lorem Ipsum"/>
-                <FollowingItem image="https://picsum.photos/200" title="John Green" description="Lorem Ipsum"/>
-                <FollowingItem image="https://picsum.photos/200" title="John Green" description="Lorem Ipsum"/>
-                <FollowingItem image="https://picsum.photos/200" title="John Green" description="Lorem Ipsum"/>
-                <FollowingItem image="https://picsum.photos/200" title="John Green" description="Lorem Ipsum"/>
-                <FollowingItem image="https://picsum.photos/200" title="John Green" description="Lorem Ipsum"/>
-                <FollowingItem image="https://picsum.photos/200" title="John Green" description="Lorem Ipsum"/>
-                <FollowingItem image="https://picsum.photos/200" title="John Green" description="Lorem Ipsum"/>
-                <FollowingItem image="https://picsum.photos/200" title="John Green" description="Lorem Ipsum"/>
-                <FollowingItem image="https://picsum.photos/200" title="John Green" description="Lorem Ipsum"/>
             </div>
         </div>
 </template>
