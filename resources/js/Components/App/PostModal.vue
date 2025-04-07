@@ -1,6 +1,6 @@
 <script setup>
 
-import { XMarkIcon, PaperClipIcon, PaperAirplaneIcon } from '@heroicons/vue/24/solid'
+import { XMarkIcon, PaperClipIcon, PaperAirplaneIcon, ArrowUturnLeftIcon } from '@heroicons/vue/24/solid'
 import { computed, ref } from 'vue'
 import {
   TransitionRoot,
@@ -20,7 +20,12 @@ const isOpen = ref(true)
 const props = defineProps({
     post: {
         type: Object,
-        required: true
+        required: true,
+        default: () => ({ 
+            id: null,
+            body: '',
+            attachments: []
+        })
     },
     modelValue: Boolean
 })
@@ -49,6 +54,10 @@ const editor = computed(() => {
     if (!cloud.data.value) return null
     return cloud.data.value.CKEditor.ClassicEditor
 })
+
+const computedAttachments = computed(() => {
+    return [...attachmentFiles.value, ...(props.post.attachments || [])]
+});
 
 const editorConfig = computed(() => {
     if (!cloud.data.value) return null
@@ -81,15 +90,17 @@ function resetModal() {
 const form = useForm({
     id: props.post.id,
     body: props.post.body ,
-    attachments: []
+    attachments: [],
+    deleted_file_ids: [],
+    _method: 'POST'
 })
 
-function submit() {
-
-    
+function submit() {    
     form.attachments = attachmentFiles.value.map(myFile => myFile.file)
+
     if (form.id) {
-            form.put(route('post.update', form.id), {
+            form._method = 'PUT'
+            form.post(route('post.update', form.id), {
             preserveScroll: true,
             onSuccess: () => {
                 closeModal()
@@ -142,7 +153,17 @@ async function readFile(file) {
 }
 
 function removeFile(myFile) {
-    attachmentFiles.value = attachmentFiles.value.filter(f => f !== myFile)
+    if (myFile.file) {
+        attachmentFiles.value = attachmentFiles.value.filter(f => f !== myFile)
+    } else {
+        form.deleted_file_ids.push(myFile.id)
+        myFile.deleted = true
+    }
+}
+
+function undoDelete(myFile) {
+    myFile.deleted = false
+    form.deleted_file_ids = form.deleted_file_ids.filter(id => id !== myFile.id)
 }
 
 </script>
@@ -201,26 +222,36 @@ function removeFile(myFile) {
                                     class="w-full min-h-[150px] max-h-[60vh] text-base leading-relaxed"
                             />
 
-                            <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 my-3"> 
+                            <div class="grid gap-3 my-3" :class="[computedAttachments.length === 1 ? 'grid-cols-1' : 'grid-cols-2']"> 
 
-                                <template v-for="(myFile, ind) of attachmentFiles">
+                                <template v-for="(myFile, ind) of computedAttachments">
 
-                                    <div class="group aspect-asquare bg-blue-100 flex flex-col items-center justify-center text-gray-500 relative">
+                                    <div class="group aspect-square bg-blue-100 flex flex-col items-center justify-center text-gray-500 relative border-2" :class="myFile.deleted ? 'border-red-500 opacity-50' : ''">
 
+                                        <!-- To Be Deleted -->
+                                        <div v-if="myFile.deleted" class="absolute left-0 bottom-0 right-0 p-2 bg-black text-white">
+                                            To Be Deleted
+                                            <ArrowUturnLeftIcon
+                                            @click="undoDelete(myFile)" 
+                                            class="w-4 h-4 cursor-pointer hover:text-gray-300"/>
+                                        </div>
+                                        <!-- To Be Deleted -->
+
+                                        <!-- Remover Arquivos -->
                                         <button 
                                             @click="removeFile(myFile)"
                                             class="absolute z-20 right-1 top-1 w-7 h-7 flex items-center justify-center bg-black/80 text-white rounded-full hover:bg-black/20">
                                             <XMarkIcon class="h-5 w-5" />
                                         </button>
+                                        <!-- Remover Arquivos -->
 
-                                        <img v-if="isImage(myFile.file)" :src="myFile.url" class="object-cover aspect-asquare" />
+                                        <!-- Preview -->
+                                        <img v-if="isImage(myFile.file || myFile)" :src="myFile.url" class="object-cover aspect-asquare" />
 
-                                        <template v-else>
-
+                                        <div v-else class="flex flex-col justify-center items-center">
                                             <PaperClipIcon class="w-10 h-10 mb-3" />
-
-                                            <small class="text-center">{{ myFile.file.name }}</small>
-                                        </template>
+                                            <small class="text-center">{{ (myFile.file || myFile).name }}</small>
+                                        </div>
                                     </div>
                                 </template>
                             </div>

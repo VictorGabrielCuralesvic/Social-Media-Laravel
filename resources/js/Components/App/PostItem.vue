@@ -122,7 +122,7 @@ function deletePost() {
 
                 <div class="group aspect-asquare bg-blue-100 flex flex-col items-center justify-center text-gray-500 relative">
 
-                    <div v-if="ind === 5" class="absolute left-0 top-0 right-0 bottom-0 z-10 bg-black/30 text-white flex items-center justify-center">
+                    <div v-if="ind === 5 && post.attachments.length > 6" class="absolute left-0 top-0 right-0 bottom-0 z-10 bg-black/30 text-white flex items-center justify-center">
                         +{{ post.attachments.length - 6 }} more
                     </div>
 
