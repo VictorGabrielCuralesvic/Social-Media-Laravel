@@ -1,6 +1,6 @@
 
-export const isImage = (attachment): Boolean => {
+export const isImage = (attachment) => {
     let mime = attachment.mime || attachment.type
     mime = mime.split('/')
-    return mime[0].toLowerCase() == 'image'
+    return mime[0].toLowerCase() === 'image'
 }
