@@ -92,7 +92,7 @@ function next() {
                         class="flex flex-col w-full transform overflow-hidden rounded bg-white text-left align-middle shadow-xl transition-all"
                     >
 
-                        <button @click="show = false" class="absolute right-3 top-3 z-30 w-10 h-10 rounded-full hover:bg-black/10 transition flex items-center justify-center text-gray-100 z-40">
+                        <button @click="show = false" class="absolute right-3 top-3 w-10 h-10 rounded-full hover:bg-black/10 transition flex items-center justify-center text-gray-100 z-40">
                             <XMarkIcon class="w-4 h-4 font-bold" />
                         </button>
 
