@@ -127,9 +127,9 @@ function deletePost() {
                     </div>
 
                     <!-- Download -->
-                    <button class="opacity-0 group-hover:opacity-100 transition-all w-8 h-8 bg-gray-700 roundedf flex items-center justify-center text-gray-100 absolute right-2 top-2 cursor-pointer hover:bg-gray-800">
+                    <a :href="route('post.download', attachment)" class="opacity-0 group-hover:opacity-100 transition-all w-8 h-8 bg-gray-700 roundedf flex items-center justify-center text-gray-100 absolute right-2 top-2 cursor-pointer hover:bg-gray-800">
                         <ArrowDownTrayIcon class="w-4 h-4" />
-                    </button>
+                    </a>
                     <!-- Download -->
 
                     <img v-if="isImage(attachment)" :src="attachment.url" class="object-cover aspect-asquare" />
